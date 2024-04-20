@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, NavLink, useParams } from 'react-router-dom';
+import 'tailwindcss/tailwind.css';
 import './style.scss';
 
 const About = (props) => {
