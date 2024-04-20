@@ -1,18 +1,21 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
-
+import useStore from '../store/zustand';
 // replace w/ redux later
 const userId = 'TbNeMzejY8WlAenoFZruIt5yji62';
 
 function Dashboard() {
-  const [flashcards, setFlashcards] = useState([]);
+  const { allFlashcards, setAllFlashcards } = useStore();
   const [title, setTitle] = useState('');
   const [cards, setCards] = useState([{ q: '', a: '' }]);
 
   const refreshFlashcards = () => {
     fetchFlashcards()
-      .then((data) => setFlashcards(data))
+      .then((data) => {
+        console.log('Fetched flashcards:', data);
+        setAllFlashcards(data);
+      })
       .catch((error) => console.error('Error fetching flashcards:', error));
   };
 
@@ -45,6 +48,7 @@ function Dashboard() {
   return (
     <div className="p-4">
       <h1 className="text-lg font-bold mb-4">Your Flashcards</h1>
+      <button onClick={() => console.log(allFlashcards)}>CUM</button>
 
       {/* Input for the title of the new flashcard set */}
       <input
@@ -86,9 +90,9 @@ function Dashboard() {
       </button>
 
       {/* Existing flashcards */}
-      {flashcards.length > 0 ? (
+      {allFlashcards && allFlashcards.length > 0 ? (
         <ul>
-          {flashcards.map((card) => (
+          {allFlashcards.map((card) => (
             <li key={card.id} className="mt-4 p-2 bg-blue-200 rounded">
               <p><strong>Title:</strong> {card.title}</p>
               <ul>
