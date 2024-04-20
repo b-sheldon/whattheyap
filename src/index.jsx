@@ -5,7 +5,7 @@ import 'tailwindcss/tailwind.css';
 import './style.scss';
 
 const About = (props) => {
-  return <div> All there is to know about me </div>;
+  return <div className="bg-red-500"> All there is to know about me </div>;
 };
 const Welcome = (props) => {
   return <div>Welcome</div>;
