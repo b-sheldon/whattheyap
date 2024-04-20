@@ -7,6 +7,7 @@ import './style.scss';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
+import Create from './pages/Create';
 
 const Welcome = (props) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Welcome = (props) => {
       <h1>Welcome to What The Yap?</h1>
       <button type="button" onClick={() => navigate('/signin')}>Sign In</button>
       <button type="button" onClick={() => navigate('/signup')}>Sign Up</button>
+      <button type="button" onClick={() => navigate('/create')}>Create</button>
     </div>
   );
 };
@@ -33,6 +35,7 @@ const App = (props) => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create" element={<Create />} />
           <Route path="*" element={<FallBack />} />
         </Routes>
       </div>
