@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SA2 24S
 
 [deployed url](https://frontend-starterpack-b-sheldon.onrender.com/)
@@ -15,3 +16,6 @@ Installed and used NVM:
 
 **Installing other node versions and setting default to the latest installed version**
 <img width="604" alt="Screenshot 2024-04-10 at 3 37 17 PM" src="https://github.com/dartmouth-cs52-24s/frontend-starterpack-b-sheldon/assets/94082091/a42d6e31-9b41-42a2-924f-0628480985a9">
+=======
+# whattheyap
+>>>>>>> bc1590c (Initial commit)
