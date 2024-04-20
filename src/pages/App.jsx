@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import useStore from '../store/zustand';
 import 'tailwindcss/tailwind.css';
 
 import SignIn from './SignIn';
@@ -7,6 +8,7 @@ import SignUp from './SignUp';
 import Dashboard from './Dashboard';
 import Create from './Create';
 import TextToSpeech from './TextToSpeech';
+import Sidebar from './Sidebar';
 
 const Welcome = (props) => {
   const navigate = useNavigate();
@@ -29,7 +31,8 @@ const FallBack = (props) => {
 const App = (props) => {
   return (
     <BrowserRouter>
-      <div>
+      <div className="flex flex-row">
+        <Sidebar></Sidebar>
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/signin" element={<SignIn />} />

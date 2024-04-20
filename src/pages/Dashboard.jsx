@@ -1,27 +1,16 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
+import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
 // replace w/ redux later
 const userId = 'TbNeMzejY8WlAenoFZruIt5yji62';
 
 function Dashboard() {
-  const { allFlashcards, setAllFlashcards } = useStore();
   const [title, setTitle] = useState('');
   const [cards, setCards] = useState([{ q: '', a: '' }]);
-
-  const refreshFlashcards = () => {
-    fetchFlashcards()
-      .then((data) => {
-        console.log('Fetched flashcards:', data);
-        setAllFlashcards(data);
-      })
-      .catch((error) => console.error('Error fetching flashcards:', error));
-  };
-
-  useEffect(() => {
-    refreshFlashcards();
-  }, []);
+  const { currentFlashcards, setCurrentFlashcards } = useStore();
+  const { currentTitle, setCurrentTitle } = useStore();
 
   const handleCardChange = (index, side, value) => {
     const newCards = [...cards];
@@ -47,17 +36,23 @@ function Dashboard() {
 
   return (
     <div className="p-4">
-      <h1 className="text-lg font-bold mb-4">Your Flashcards</h1>
+      <h1 className="mb-4 text-lg font-bold">{currentTitle}</h1>
       <button onClick={() => console.log(allFlashcards)}>CUM</button>
 
       {/* Input for the title of the new flashcard set */}
-      <input
+      {/* <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Title of the flashcard set"
-        className="mb-4 p-2 border rounded"
-      />
+        className="p-2 mb-4 border rounded"
+      /> */}
+      {currentFlashcards.map((card) => (
+        <div key={card.q} className="flex flex-row">
+          <div className='p-2 m-4 bg-blue-200 rounded'>{card.q}</div>
+          <div className='p-2 m-4 bg-blue-200 rounded'>{card.a}</div>
+        </div>
+      ))}
 
       {/* Inputs for each card */}
       {cards.map((card, index) => (
@@ -67,7 +62,7 @@ function Dashboard() {
             value={card.q}
             onChange={(e) => handleCardChange(index, 'q', e.target.value)}
             placeholder="Front (Question)"
-            className="mr-2 p-1 border rounded"
+            className="p-1 mr-2 border rounded"
           />
           <input
             type="text"
@@ -80,34 +75,14 @@ function Dashboard() {
       ))}
 
       {/* Button to add more cards */}
-      <button type="button" onClick={addCard} className="mt-2 mb-4 p-2 bg-green-300 rounded text-white">
+      <button type="button" onClick={addCard} className="p-2 mt-2 mb-4 text-white bg-green-300 rounded">
         Add Another Card
       </button>
 
       {/* Button to submit the whole set */}
-      <button type="button" onClick={handleSubmit} className="p-2 bg-blue-500 rounded text-white">
+      <button type="button" onClick={handleSubmit} className="p-2 text-white bg-blue-500 rounded">
         Submit Flashcard Set
       </button>
-
-      {/* Existing flashcards */}
-      {allFlashcards && allFlashcards.length > 0 ? (
-        <ul>
-          {allFlashcards.map((card) => (
-            <li key={card.id} className="mt-4 p-2 bg-blue-200 rounded">
-              <p><strong>Title:</strong> {card.title}</p>
-              <ul>
-                {card.cards.map((subcard, idx) => (
-                  <li key={idx}>
-                    <strong>Front:</strong> {subcard.q}, <strong>Back:</strong> {subcard.a}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No flashcards found.</p>
-      )}
     </div>
   );
 }
