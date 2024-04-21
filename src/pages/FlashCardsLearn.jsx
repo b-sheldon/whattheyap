@@ -164,8 +164,8 @@ const FlashcardsLearn = () => {
                     <div className='leading-none'>mode</div>
                 </div>
                 <button className=" relative w-10 h-10" onClick={toggleSpeechMode}>
-                    <IconVolumeOn className="absolute top-0 left-0 transition-all text-green-800" style={{ opacity: speechMode ? 1 : 0 }} />
-                    <IconVolumeOff className="absolute top-0 left-0 transition-all text-red-800" style={{ opacity: !speechMode ? 1 : 0 }} />
+                    <IconVolumeOn className="absolute top-0 left-0 transition-all text-green-800 hover:scale-110 transform" style={{ opacity: speechMode ? 1 : 0 }} />
+                    <IconVolumeOff className="absolute top-0 left-0 transition-all text-red-800 hover:scale-110" style={{ opacity: !speechMode ? 1 : 0 }} />
                 </button>
             </div>
         </div>
@@ -185,7 +185,7 @@ const FlashcardsLearn = () => {
                     placeholder={answerBoxPlaceholder()}
                 />
                 { !speechMode && 
-                <button type="submit" disabled={listenerState === 'listening'} className="self-end border-2 py-1 px-3 rounded-xl cursor-pointer border-green-800 text-green-800 shadow-md">submit</button>
+                <button type="submit" disabled={listenerState === 'listening'} className="self-end border-2 py-1 px-3 rounded-xl cursor-pointer border-green-800 text-green-800 hover:bg-green-400 shadow-md">submit</button>
                 }
             </form>
         </div>
