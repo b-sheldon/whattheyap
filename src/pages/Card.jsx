@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { fetchFlashcards,updateFlashcardSet } from "../functions/flashcards";
+import { fetchFlashcards, updateFlashcardSet } from "../functions/flashcards";
 import useStore from "../store/zustand";
 
 const Card = ({card}) => {
@@ -9,6 +9,7 @@ const Card = ({card}) => {
   const { currentID } = useStore();
   const { currentFlashcards, setCurrentFlashcards } = useStore();
   const { currentTitle, setCurrentTitle } = useStore();
+  const { allFlashcards, setAllFlashcards } = useStore();
 
   const toggleEdit = () => {
     if (editing) {
@@ -20,11 +21,15 @@ const Card = ({card}) => {
         return c;
       });
       setCurrentFlashcards(newFlashcards);
-      // Update the card in the database
-      console.log(currentID);
-      console.log(currentTitle);
-      console.log(currentFlashcards);
-      updateFlashcardSet(currentID, currentTitle, currentFlashcards);
+      // Update the card in allFlashcards
+      const updatedFlashcards = allFlashcards.map((set) => {
+        if (set.id === currentID) {
+          return { id: set.id, title: currentTitle, cards: newFlashcards };
+        }
+        return set;
+      });
+      setAllFlashcards(updatedFlashcards);
+      updateFlashcardSet(currentID, currentTitle, newFlashcards);
       fetchFlashcards();
     }
     setEditing(!editing);
