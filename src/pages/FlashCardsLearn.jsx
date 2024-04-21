@@ -140,6 +140,7 @@ const FlashcardsLearn = () => {
             // handleMute();
             return;
         }
+        if (currIndex >= currentFlashcards.length) return;
         console.log('starting speech mode');
         await textToSpeech(currentFlashcards[currIndex].q);
         sttFromMic();
@@ -155,7 +156,7 @@ const FlashcardsLearn = () => {
     if (currentFlashcards.length === 0 || currIndex < 0) return <div>Loading...</div>;
 
     return (
-    <div className="flex-grow flex flex-col items-center p-10 gap-6 text-xl">
+    <div className="flex-grow flex flex-col items-center gap-6 text-xl">
         <div className="w-full flex justify-between items-center gap-4 border-b-2 py-6">
             <button onClick={() => navigate("/dashboard")}><IconBackArrow className="cursor-pointer w-10 h-10 hover:scale-110 hover:-rotate-6 transition" /></button>
             <div className="flex gap-2">
