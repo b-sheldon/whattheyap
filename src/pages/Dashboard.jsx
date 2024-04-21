@@ -71,7 +71,7 @@ function Dashboard() {
             <p>Study Flashcards</p>
           </button>
 
-          <button className="flex items-center px-4 py-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={() => navigate('/flashcardquiz')}>
+          <button className="flex items-center px-4 py-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={() => navigate('/quiz')}>
             <i className="mr-2 fa-regular fa-hand"></i>
             <p>Take Quiz</p>
           </button>

@@ -12,6 +12,7 @@ import TextToSpeech from './TextToSpeech';
 import Sidebar from './Sidebar';
 import FlashcardsLearn from './FlashcardsLearn';
 import TopBar from './TopBar';
+import Quiz from './Quiz';
 
 const FallBack = (props) => {
   return <div>URL Not Found</div>;
@@ -45,6 +46,7 @@ const App = (props) => {
               <Route path="/create" element={userId ? <Create /> :  <Navigate to="/"/>} />
               <Route path="/text-to-speech" element={userId ? <TextToSpeech /> : <Navigate to="/"/>}/>
               <Route path="/flashcardquiz" element={userId ? <FlashcardsLearn /> : <Navigate to="/"/>} />
+              <Route path="/quiz" element={userId ? <Quiz /> : <Navigate to="/"/>} />
               <Route path="*" element={<FallBack />} />
             </Routes>
           </div>
