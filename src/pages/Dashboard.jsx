@@ -1,9 +1,11 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
+import { createFlashcardSet } from '../functions/flashcards';
 import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
+import Card from './Card';
+import TopBar from './TopBar.jsx';
 
 function Dashboard() {
   const [title, setTitle] = useState('');
@@ -35,44 +37,18 @@ function Dashboard() {
     }
   };
 
-  const logout = useStore((state) => state.logout); // Assuming logout is a function in your Zustand store
-
-  const handleLogout = () => {
-    logout(); // Clears user session
-  };
-
   return (
     <div className="w-full">
-      <div className="bg-purpledark h-20 text-black flex justify-between items-center p-4">
-        <h1 className="text-4xl font-bold">WhatTheYap</h1>
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 rounded-3xl border-black border-2 hover:bg-purplelight rounded transition duration-300"
-        >
-          signout
-        </button>
-      </div>
+      
+      <TopBar></TopBar>
 
-      <div className="p-4 w-full">
-
-        
+      <div className="flex flex-col flex-grow p-4">
         <h1 className="mb-4 text-lg font-bold">{currentTitle}</h1>
         <button onClick={() => navigate('/flashcardquiz')}>CUM</button>
 
-        {/* Input for the title of the new flashcard set */}
-        {/* <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Title of the flashcard set"
-          className="p-2 mb-4 border rounded"
-        /> */}
-        {currentFlashcards.map((card) => (
-          <div key={card.q} className="flex flex-row">
-            <div className='p-2 m-4 bg-blue-200 rounded'>{card.q}</div>
-            <div className='p-2 m-4 bg-blue-200 rounded'>{card.a}</div>
-          </div>
-        ))}
+      {currentFlashcards.map((card) => (
+        <Card key={card.q} card={card}/>
+      ))}
 
         {/* Inputs for each card */}
         {cards.map((card, index) => (
