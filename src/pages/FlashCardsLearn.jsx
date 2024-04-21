@@ -11,10 +11,15 @@ const feedbackText = (correct, prevQuestion, nextQuestion) => {
 };
 
 const FlashcardsLearn = () => {
-    const { currentFlashcards } = useStore();
+    const { currentFlashcards, speechMode, setSpeechMode } = useStore();
     const [currIndex, setCurrIndex] = useState(-1);
     const { transcript, listenerState, textToSpeech, sttFromMic, handleMute } = useTTS();
     const [correct, setCorrect] = useState(false);
+
+    const condTTS = async (text) => {
+        if (!speechMode) return;
+        await textToSpeech(text);
+    };
 
     const startQuiz = () => {
         setCurrIndex(0);
@@ -42,25 +47,33 @@ const FlashcardsLearn = () => {
         }
     }, [listenerState]);
 
-    useEffect(() => {
+
+    const handleNextQuesion = async () => {
         if (currIndex === 0) {
-            console.log("called this");
-            textToSpeech(currentFlashcards[currIndex].q, sttFromMic);
+            await condTTS(currentFlashcards[currIndex].q);
+            sttFromMic();
         }
         else if (currIndex < currentFlashcards.length && currIndex > 0) {
-            const feedback = feedbackText(correct, currentFlashcards[currIndex - 1], currentFlashcards[currIndex]);
-            textToSpeech(feedback, sttFromMic);
+            const feedback = correct ? 'Correct!' : `Incorrect. The correct answer was: ${currentFlashcards[currIndex - 1].a}.`;
+            await condTTS(feedback);
+            await condTTS(`Next question is: ${currentFlashcards[currIndex].q}`);
             sttFromMic();
         } else if (currIndex >= currentFlashcards.length) {
-            const feedback = feedbackText(correct, currentFlashcards[currIndex - 1], null);
-            textToSpeech(feedback, null);
+            const feedback = correct ? 'Correct!' : `Incorrect. The correct answer was: ${currentFlashcards[currIndex - 1].a}.`
+            await condTTS(feedback);
+            await condTTS('Quiz complete.');
         }
+    };
+
+    useEffect(() => {
+        handleNextQuesion();
     }, [currIndex]);
 
     return (
     <div>
         <button onClick={startQuiz}>fart</button>
-        {listenerState}
+        <div>{listenerState}</div>
+        <div onClick={() => setSpeechMode(val => !val)}>{speechMode ? 'speech mode!' : 'text mode.'}</div>
     </div>
     );
 

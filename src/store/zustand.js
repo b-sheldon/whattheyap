@@ -6,6 +6,8 @@ const useStore = create((set) => ({
     currentTitle: '',
     allFlashcards: [],
     sidebarCollapsed: false,
+    speechMode: true,
+    setSpeechMode: (speechMode) => set({ speechMode }),
     setCurrentFlashcards: (currentFlashcards) => set({ currentFlashcards }),
     setCurrentTitle: (currentTitle) => set({ currentTitle }),
     setAllFlashcards: (allFlashcards) => set({ allFlashcards }),

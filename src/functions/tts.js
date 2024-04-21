@@ -20,51 +20,60 @@ export default function useTTS() {
 
         setDisplayText('speak into your microphone...');
         setListenerState('listening');
+        console.log('listening...');
         recognizer.recognizeOnceAsync(result => {
             if (result.reason === ResultReason.RecognizedSpeech) {
                 setDisplayText(`RECOGNIZED: Text=${result.text}`);
                 setTranscript(result.text);
                 setListenerState('stopped');
+                console.log('stopped listening');
             } else {
                 setDisplayText('ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.');
                 setTranscript('');
                 setListenerState('stopped');
+                console.log('stopped listening due to error.');
             }
         });
     }
+    
+    function textToSpeech(textToSpeak, callback) {
+        return new Promise(async function (resolve, reject) {
+            const tokenObj = await getTokenOrRefresh();
+            const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
+            const myPlayer = new speechsdk.SpeakerAudioDestination();
+            updatePlayer(p => {p.p = myPlayer; return p;});
+            myPlayer.onAudioEnd = function (s) {
+                console.log('audio end');
+                if (callback) callback();
+                resolve();
+            };
 
-    async function textToSpeech(textToSpeak, callback) {
-        const tokenObj = await getTokenOrRefresh();
-        const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
-        const myPlayer = new speechsdk.SpeakerAudioDestination();
-        myPlayer.onAudioEnd = function (s) {
-            console.log('audio end');
-            if (callback) callback();
-        };
+            // updatePlayer(p => {p.p = myPlayer; return p;});
+            // const audioConfig = speechsdk.AudioConfig.fromSpeakerOutput(myPlayer);
 
-        // updatePlayer(p => {p.p = myPlayer; return p;});
-        // const audioConfig = speechsdk.AudioConfig.fromSpeakerOutput(myPlayer);
+            let synthesizer = new speechsdk.SpeechSynthesizer(speechConfig, speechsdk.AudioConfig.fromSpeakerOutput(myPlayer));
+            console.log('now playing question');
+            setDisplayText(`speaking text: ${textToSpeak}...`);
+            synthesizer.speakTextAsync(
+            textToSpeak,
+            result => {
+                let text;
+                if (result.reason === speechsdk.ResultReason.SynthesizingAudioCompleted) {
+                    text = `synthesis finished for "${textToSpeak}".\n`
+                } else if (result.reason === speechsdk.ResultReason.Canceled) {
+                    text = `synthesis failed. Error detail: ${result.errorDetails}.\n`
+                }
+                synthesizer.close();
+                synthesizer = undefined;
+                setDisplayText(text);
+            },
+            function (err) {
+                setDisplayText(`Error: ${err}.\n`);
 
-        let synthesizer = new speechsdk.SpeechSynthesizer(speechConfig, speechsdk.AudioConfig.fromSpeakerOutput(myPlayer));
-        setDisplayText(`speaking text: ${textToSpeak}...`);
-        synthesizer.speakTextAsync(
-        textToSpeak,
-        result => {
-            let text;
-            if (result.reason === speechsdk.ResultReason.SynthesizingAudioCompleted) {
-                text = `synthesis finished for "${textToSpeak}".\n`
-            } else if (result.reason === speechsdk.ResultReason.Canceled) {
-                text = `synthesis failed. Error detail: ${result.errorDetails}.\n`
-            }
-            synthesizer.close();
-            synthesizer = undefined;
-            setDisplayText(text);
-        },
-        function (err) {
-            setDisplayText(`Error: ${err}.\n`);
-
-            synthesizer.close();
-            synthesizer = undefined;
+                synthesizer.close();
+                synthesizer = undefined;
+                reject();
+            });
         });
     }
 

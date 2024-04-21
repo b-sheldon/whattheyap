@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
 import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
@@ -11,6 +12,7 @@ function Dashboard() {
   const [cards, setCards] = useState([{ q: '', a: '' }]);
   const { currentFlashcards, setCurrentFlashcards } = useStore();
   const { currentTitle, setCurrentTitle } = useStore();
+  const navigate = useNavigate();
 
   const handleCardChange = (index, side, value) => {
     const newCards = [...cards];
@@ -37,7 +39,7 @@ function Dashboard() {
   return (
     <div className="p-4">
       <h1 className="mb-4 text-lg font-bold">{currentTitle}</h1>
-      <button onClick={() => console.log(allFlashcards)}>CUM</button>
+      <button onClick={() => navigate('/flashcardquiz')}>CUM</button>
 
       {/* Input for the title of the new flashcard set */}
       {/* <input
