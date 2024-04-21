@@ -15,7 +15,7 @@ const Card = ({card}) => {
     if (editing) {
       // Update the card in currentFlashcards
       const newFlashcards = currentFlashcards.map((c) => {
-        if (c.q === question) {
+        if (c === card) {
           return { q: question, a: answer };
         }
         return c;
@@ -34,6 +34,19 @@ const Card = ({card}) => {
     }
     setEditing(!editing);
   }
+  const deleteCard = () => {
+    const newFlashcards = currentFlashcards.filter((c) => c.q !== question);
+    setCurrentFlashcards(newFlashcards);
+    const updatedFlashcards = allFlashcards.map((set) => {
+      if (set.id === currentID) {
+        return { id: set.id, title: currentTitle, cards: newFlashcards };
+      }
+      return set;
+    });
+    setAllFlashcards(updatedFlashcards);
+    updateFlashcardSet(currentID, currentTitle, newFlashcards);
+    fetchFlashcards();
+  }
   
   const renderCard = () => {
     if (editing) {
@@ -47,7 +60,7 @@ const Card = ({card}) => {
             <p className='text-lg font-bold'>DEFINITION</p>
             <textarea value={answer} onChange={(e) => setAnswer(e.target.value)} className='w-11/12 p-2 m-2 text-xl bg-gray-100 resize-none border-box rounded-xl focus:outline-purpledark'></textarea>
           </div>
-          <i onClick={toggleEdit}className="absolute text-xl transition-all cursor-pointer top-2 right-2 fa-solid fa-check hover:scale-110 hover:text-purpledark"></i>
+          <i onClick={() => toggleEdit(card)}className="absolute text-xl transition-all cursor-pointer top-2 right-2 fa-solid fa-check hover:scale-110 hover:text-purpledark"></i>
         </div>
       );
     }
@@ -61,7 +74,8 @@ const Card = ({card}) => {
           <p className='text-lg font-bold'>DEFINITION</p>
           <div lang="en" className='p-4 text-xl hyphens-auto'>{answer}</div>
         </div>
-        <i onClick={toggleEdit}className="absolute text-xl transition-all cursor-pointer top-2 right-2 fa-solid fa-pencil hover:scale-110 hover:text-purpledark"></i>
+        <i onClick={deleteCard}className="absolute text-xl transition-all cursor-pointer top-4 right-12 fa-solid fa-trash hover:scale-110 hover:text-purpledark"></i>
+        <i onClick={toggleEdit}className="absolute text-xl transition-all cursor-pointer top-4 right-4 fa-solid fa-pencil hover:scale-110 hover:text-purpledark"></i>
       </div>
     );
   }
