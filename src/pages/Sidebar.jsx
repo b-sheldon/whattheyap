@@ -62,6 +62,7 @@ const Sidebar = (props) => {
           ) : (
             <p className='pl-6'>No flashcards found.</p>
           )}
+          <button onClick={() => navigate('/create')} className="self-center p-4 mt-4 ml-6 text-xl text-center transition-transform shadow bg-purpledark rounded-xl hover:scale-105">Create <i className="text-center fa-regular fa-square-plus"></i></button>
         </div>
       </div>
     }
