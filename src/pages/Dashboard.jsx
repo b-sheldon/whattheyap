@@ -33,23 +33,20 @@ function Dashboard() {
     setNextQuestion('');
     setNextAnswer('');
     // Update the card in allFlashcards
-    let localID = "";
     const updatedFlashcards = allFlashcards.map((set) => {
-      if (set.title === currentTitle) {
-        localID = set.id;
+      if (set.id === currentID) {
         return { id: set.id, title: currentTitle, cards: newFlashcards };
       }
       return set;
     });
     setAllFlashcards(updatedFlashcards);
-    updateFlashcardSet(localID, currentTitle, newFlashcards);
+    updateFlashcardSet(currentID, currentTitle, newFlashcards);
   };
 
   const deleteSet = () => {
-    const setToDelete = allFlashcards.find((set) => set.title === currentTitle);
     const updatedFlashcards = allFlashcards.filter((set) => set.title !== currentTitle);
     setAllFlashcards(updatedFlashcards);
-    deleteFlashcardSet(setToDelete.id);
+    deleteFlashcardSet(currentID);
     setCurrentFlashcards([]);
     setCurrentTitle('');
     setCurrentID('');

@@ -38,8 +38,7 @@ const Card = ({card}) => {
     const newFlashcards = currentFlashcards.filter((c) => c.q !== question);
     setCurrentFlashcards(newFlashcards);
     const updatedFlashcards = allFlashcards.map((set) => {
-      if (set.title === currentTitle) {
-        console.log(set.id);
+      if (set.id === currentID) {
         return { id: set.id, title: currentTitle, cards: newFlashcards };
       }
       return set;

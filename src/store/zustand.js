@@ -27,7 +27,7 @@ const useStore = create(persist((set, get) => ({
     setAllFlashcards: (allFlashcards) => set({ allFlashcards }),
     setUserId: (userId) => set({ userId }),
     setSidebarCollapsed: (sidebarCollapsed) => set({ sidebarCollapsed }),
-    setCurrentID: (currentId) => set({ currentId }),
+    setCurrentID: (currentID) => set({ currentID }),
     logout: () => set({ ...initialState }),
 }),
 {
