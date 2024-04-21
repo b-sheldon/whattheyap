@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookie from 'universal-cookie';
+import { API_URL } from './functions/config';
 
 export async function getTokenOrRefresh() {
     const cookie = new Cookie();
@@ -7,7 +8,7 @@ export async function getTokenOrRefresh() {
 
     if (speechToken === undefined) {
         try {
-            const res = await axios.get('http://localhost:8080/api/get-speech-token');
+            const res = await axios.get(`${API_URL}/api/get-speech-token`);
             const token = res.data.token;
             const region = res.data.region;
             cookie.set('speech-token', region + ':' + token, {maxAge: 540, path: '/'});
