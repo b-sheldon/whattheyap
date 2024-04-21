@@ -51,8 +51,11 @@ const FlashcardsLearn = () => {
         startQuiz();
     }, []);
 
+
+
+
     useEffect(() => {
-        if (listenerState === 'stopped') {
+        if (listenerState === 'stopped' && speechMode) {
             if (transcript) {
                 setAnswer(transcript);
                 console.log(currIndex);
@@ -64,9 +67,14 @@ const FlashcardsLearn = () => {
                     setCorrect(validateResponse.data === 1);
                     setCurrIndex(currIndex + 1);
                 });
+            } else {
+                if (currIndex >= 0 && currIndex < currentFlashcards.length) {
+                    textToSpeech(currentFlashcards[currIndex].q).then(() => {
+                        sttFromMic();
+                        answerBox.current.focus();
+                    });
+                }
             }
-        } else if (listenerState === 'listening') {
-            // 
         }
     }, [listenerState]);
 
