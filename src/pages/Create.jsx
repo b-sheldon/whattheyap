@@ -14,7 +14,7 @@ function Create() {
   const [loading, setLoading] = useState(false);
   const { userId } = useStore();
   const navigate = useNavigate(); // Hook for navigation
-  const { setCurrentFlashcards } = useStore();
+  const { setCurrentFlashcards, setAllFlashcards, setCurrentID } = useStore();
   const { setCurrentTitle } = useStore();
 
   const createFlashcardsRequest = async () => {
@@ -23,9 +23,13 @@ function Create() {
       const response = await axios.post(`${API_URL}/gpt/generate-flashcards`, {
         notes,
       });
-      console.log(response);
-      await createFlashcardSet(title, response.data.flashcards, userId);
-      await fetchFlashcards(userId); // Fetch the latest list of flashcards to include the new one
+      const createSetResponse = await createFlashcardSet(title, response.data.flashcards, userId);
+      console.log(createSetResponse);
+      const data = await fetchFlashcards(userId);
+      console.log('Fetched flashcards:', data);
+      setAllFlashcards(data);
+      setCurrentID(createSetResponse.id);
+      console.log(createSetResponse.id);
       setCurrentTitle(title);
       setCurrentFlashcards(response.data.flashcards);
       navigate('/dashboard'); // Navigate to a new page on success

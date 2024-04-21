@@ -45,7 +45,6 @@ const Card = ({card}) => {
     });
     setAllFlashcards(updatedFlashcards);
     updateFlashcardSet(currentID, currentTitle, newFlashcards);
-    fetchFlashcards();
   }
   
   const renderCard = () => {
