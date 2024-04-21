@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:8080/flashcards';
 
-export const fetchFlashcards = async () => {
-  const response = await fetch(API_URL);
+export const fetchFlashcards = async (userId) => {
+  const response = await fetch(API_URL + `/user/${userId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch flashcards');
   }

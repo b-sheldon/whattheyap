@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createFlashcardSet, fetchFlashcards } from '../functions/flashcards';
-
-// replace w/ redux later
-const userId = 'TbNeMzejY8WlAenoFZruIt5yji62';
+import useStore from '../store/zustand';
 
 function Create() {
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const { userId } = useStore();
   const navigate = useNavigate(); // Hook for navigation
 
   const createFlashcardsRequest = async () => {
@@ -21,7 +20,7 @@ function Create() {
       });
       console.log(response);
       await createFlashcardSet(title, response.data.flashcards, userId);
-      await fetchFlashcards(); // Fetch the latest list of flashcards to include the new one
+      await fetchFlashcards(userId); // Fetch the latest list of flashcards to include the new one
       navigate('/dashboard'); // Navigate to a new page on success
     } catch (error) {
       console.error('Error creating flashcards:', error);
