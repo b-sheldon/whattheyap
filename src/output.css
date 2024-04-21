@@ -671,12 +671,24 @@ video {
   height: 7rem;
 }
 
-.h-4\/5 {
-  height: 80%;
-}
-
 .h-screen {
   height: 100vh;
+}
+
+.h-\[80v\] {
+  height: 80v;
+}
+
+.h-\[80vh\] {
+  height: 80vh;
+}
+
+.max-h-52 {
+  max-height: 13rem;
+}
+
+.max-h-80 {
+  max-height: 20rem;
 }
 
 .min-h-screen {
@@ -820,8 +832,8 @@ video {
   overflow: hidden;
 }
 
-.overflow-y-scroll {
-  overflow-y: scroll;
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .hyphens-auto {

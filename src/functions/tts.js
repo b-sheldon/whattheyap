@@ -4,7 +4,14 @@ import { ResultReason } from 'microsoft-cognitiveservices-speech-sdk';
 
 import * as speechsdk from 'microsoft-cognitiveservices-speech-sdk';
 
+import useSound from 'use-sound';
+
+import micOnSound from '../sounds/micOn.wav';
+import micOffSound from '../sounds/micOff.wav';
+
 export default function useTTS() {
+    const [playMicOnSound] = useSound(micOnSound);
+    const [playMicOffSound] = useSound(micOffSound);
     const [displayText, setDisplayText] = useState('INITIALIZED: ready to test speech...');
     const [transcript, setTranscript] = useState('');
     const [listenerState, setListenerState] = useState('stopped');
@@ -21,16 +28,19 @@ export default function useTTS() {
         setDisplayText('speak into your microphone...');
         setListenerState('listening');
         console.log('listening...');
+        playMicOnSound();
         recognizer.recognizeOnceAsync(result => {
             if (result.reason === ResultReason.RecognizedSpeech) {
                 setDisplayText(`RECOGNIZED: Text=${result.text}`);
                 setTranscript(result.text);
                 setListenerState('stopped');
+                playMicOffSound();
                 console.log('stopped listening');
             } else {
                 setDisplayText('ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.');
                 setTranscript('');
                 setListenerState('stopped');
+                playMicOffSound();
                 console.log('stopped listening due to error.');
             }
         });
