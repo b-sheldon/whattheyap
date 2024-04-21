@@ -24,12 +24,10 @@ function Create() {
         notes,
       });
       const createSetResponse = await createFlashcardSet(title, response.data.flashcards, userId);
-      console.log(createSetResponse);
       const data = await fetchFlashcards(userId);
       console.log('Fetched flashcards:', data);
       setAllFlashcards(data);
       setCurrentID(createSetResponse.id);
-      console.log(createSetResponse.id);
       setCurrentTitle(title);
       setCurrentFlashcards(response.data.flashcards);
       navigate('/dashboard'); // Navigate to a new page on success
