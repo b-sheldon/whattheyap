@@ -25,9 +25,9 @@ function SignUp() {
   };
 
   return (
-    <div className="flex items-center w-full justify-center min-h-screen bg-purpledark">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-t from-color4 via-color3 to-color2 text-black w-full">
       <div className="p-8 bg-white shadow-lg rounded-lg max-w-md w-full">
-        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Sign Up</h2>
+        <h2 className="text-2xl font-semibold text-center text-color4 text-gray-800 mb-6">Sign Up</h2>
         {error && <div className="text-red-500 text-center">{error}</div>}
         <input
           type="email"
@@ -48,14 +48,14 @@ function SignUp() {
           disabled={!email || !password}
           onClick={handleSignUp}
           className={`w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-            !email || !password ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
+            !email || !password ? "bg-gray-500" : "bg-color3 hover:bg-color2"
           }`}
         >
           Sign Up
         </button>
 
         <div className="mt-4 text-center">
-          <a href="/signin" className="text-black-500 hover:underline">Already have an account?</a>
+          <a href="/signin" className="text-color3 hover:underline">Already have an account?</a>
         </div>
       </div>
     </div>

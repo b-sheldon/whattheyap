@@ -76,7 +76,7 @@ function Create() {
 
       <div className="flex flex-col justify-center gap-4 pl-4 pr-4 ml-auto mr-auto">
         <div className="text-3xl text-center">
-          Welcome. Paste or Upload your notes to create a new set of Flashcards.
+          Welcome! Paste or Upload your notes to create a new set of Flashcards.
         </div>
         <input
           type="text"

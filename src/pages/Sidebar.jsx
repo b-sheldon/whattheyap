@@ -40,7 +40,7 @@ const Sidebar = (props) => {
   return (
     <div>
       {sidebarCollapsed ?
-      <div className="flex flex-col h-20 p-4 bg-purpledark">
+      <div className="flex flex-col h-20 p-4 bg-color4">
         <button onClick={toggleSidebar} className="self-start w-12 p-2 text-xl font-bold text-white transition-transform rounded hover:scale-110">
           <i className="fa-solid fa-bars"></i>
         </button>
