@@ -6,6 +6,7 @@ import { createFlashcardSet, fetchFlashcards } from '../functions/flashcards';
 import useStore from '../store/zustand';
 import pdfToText from 'react-pdftotext'
 import mammoth from 'mammoth';
+import { API_URL } from '../functions/config';
 
 function Create() {
   const [title, setTitle] = useState('');
@@ -17,7 +18,7 @@ function Create() {
   const createFlashcardsRequest = async () => {
     setLoading(true); // Start loading
     try {
-      const response = await axios.post('http://localhost:8080/gpt/generate-flashcards', {
+      const response = await axios.post(`${API_URL}/gpt/generate-flashcards`, {
         notes,
       });
       console.log(response);

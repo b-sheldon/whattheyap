@@ -6,6 +6,7 @@ import useStore from '../store/zustand';
 import IconVolumeOn from '../icons/IconVolumeOn';
 import IconVolumeOff from '../icons/IconVolumeOff';
 import IconBackArrow from '../icons/IconBackArrow';
+import { API_URL } from '../functions/config';
 
 const timeSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -37,7 +38,7 @@ const FlashcardsLearn = () => {
         e.preventDefault();
         if (speechMode) return;
         if (currIndex >= currentFlashcards.length) return;
-        axios.post('http://localhost:8080/gpt/validate-answer', {
+        axios.post(`${API_URL}/gpt/validate-answer`, {
             response: answer,
             answer: currentFlashcards[currIndex].a,
         }).then((validateResponse) => {
@@ -59,7 +60,7 @@ const FlashcardsLearn = () => {
             if (transcript) {
                 setAnswer(transcript);
                 console.log(currIndex);
-                axios.post('http://localhost:8080/gpt/validate-answer', {
+                axios.post(`${API_URL}/gpt/validate-answer`, {
                     response: transcript,
                     answer: currentFlashcards[currIndex].a,
                 }).then((validateResponse) => {

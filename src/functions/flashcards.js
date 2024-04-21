@@ -1,7 +1,7 @@
-const API_URL = 'http://localhost:8080/flashcards';
+import { API_URL } from './config'
 
 export const fetchFlashcards = async (userId) => {
-  const response = await fetch(API_URL + `/user/${userId}`);
+  const response = await fetch(`${API_URL}/flashcards/user/${userId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch flashcards');
   }
@@ -9,7 +9,7 @@ export const fetchFlashcards = async (userId) => {
 };
 
 export const createFlashcardSet = async (title, cards, userId) => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/flashcards`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title, cards, userId }),
@@ -21,7 +21,7 @@ export const createFlashcardSet = async (title, cards, userId) => {
 };
 
 export const updateFlashcardSet = async (id, title, cards) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(`${API_URL}/flashcards/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title, cards }),
