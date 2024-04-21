@@ -10,7 +10,7 @@ import { API_URL } from '../functions/config';
 
 const timeSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const FlashcardsLearn = () => {
+const LearnFlashcards = () => {
     const navigate = useNavigate();
     const { currentFlashcards, speechMode, setSpeechMode, currentTitle } = useStore();
     const [currIndex, setCurrIndex] = useState(-1);
@@ -195,4 +195,4 @@ const FlashcardsLearn = () => {
 
 };
 
-export default FlashcardsLearn;
+export default LearnFlashcards;

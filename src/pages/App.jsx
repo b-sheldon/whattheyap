@@ -10,7 +10,7 @@ import Dashboard from './Dashboard';
 import Create from './Create';
 import TextToSpeech from './TextToSpeech';
 import Sidebar from './Sidebar';
-import FlashcardsLearn from './FlashcardsLearn';
+import LearnFlashcards from './LearnFlashcards';
 import TopBar from './TopBar';
 import Quiz from './Quiz';
 
@@ -45,7 +45,7 @@ const App = (props) => {
               <Route path="/dashboard" element={userId ? <Dashboard /> : <Navigate to="/"/>} />
               <Route path="/create" element={userId ? <Create /> :  <Navigate to="/"/>} />
               <Route path="/text-to-speech" element={userId ? <TextToSpeech /> : <Navigate to="/"/>}/>
-              <Route path="/flashcardquiz" element={userId ? <FlashcardsLearn /> : <Navigate to="/"/>} />
+              <Route path="/flashcardquiz" element={userId ? <LearnFlashcards /> : <Navigate to="/"/>} />
               <Route path="/quiz" element={userId ? <Quiz /> : <Navigate to="/"/>} />
               <Route path="*" element={<FallBack />} />
             </Routes>
