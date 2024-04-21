@@ -6,6 +6,7 @@ import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
 import Card from './Card';
 import { updateFlashcardSet } from '../functions/flashcards';
+import IconFlashcards from '../icons/IconFlashcards';
 
 function Dashboard() {
   const { allFlashcards, setAllFlashcards } = useStore();
@@ -58,25 +59,24 @@ function Dashboard() {
     }
   };
 
-  const containerStyle = {
-    paddingRight: sidebarCollapsed ? 80 : 40,
-    paddingLeft: sidebarCollapsed ? 0 : 40,
-    paddingBottom: 50,
-    paddingTop: 50,
-    height: 'calc(100vh - 80px)',
-    overflowY: 'scroll',
-  };
-
   return (
     <div className="flex flex-col flex-grow p-2">
         
       <div className="flex flex-row items-center justify-between flex-grow w-full p-2 mb-4">
         <h1 className="mb-4 text-4xl font-bold">{currentTitle}</h1>
 
-        <button className="px-4 py-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={() => navigate('/flashcardquiz')}>
-          <i className="mr-2 fa-regular fa-hand"></i>
-          Take Quiz
-        </button>
+        <div className='flex justify-between'>
+          <button className="flex items-center px-4 py-2 mr-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={() => navigate('/flashcardquiz')}>
+            <IconFlashcards className="w-5 mr-2"/>
+            <p>Study Flashcards</p>
+          </button>
+
+          <button className="flex items-center px-4 py-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={() => navigate('/flashcardquiz')}>
+            <i className="mr-2 fa-regular fa-hand"></i>
+            <p>Take Quiz</p>
+          </button>
+        </div>
+        
 
       </div>
 
