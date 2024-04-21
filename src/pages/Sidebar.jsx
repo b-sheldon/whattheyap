@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
 import useStore from '../store/zustand';
 
@@ -10,6 +10,7 @@ const Sidebar = (props) => {
   const { currentTitle, setCurrentTitle } = useStore();
   const { userId } = useStore();
   const { currentID, setCurrentID } = useStore();
+  const location = useLocation();
   
   const navigate = useNavigate(); // Hook for navigation
 
@@ -50,7 +51,13 @@ const Sidebar = (props) => {
           <i className="fa-solid fa-x"></i>
         </button>
         <div className={`${sidebarCollapsed ? 'w-20' : 'w-64'}`} style={{ transition: 'width 0.3s' }}>
-          <h1 className="mb-4 ml-6 text-lg text-2xl font-bold">Your Study Sets</h1>
+          <div className='w-full p-4 text-2xl flex justify-between items-center'>
+            <div className="font-bold">Your Study Sets</div>
+            {(location.pathname !== "/create") && <button onClick={() => navigate('/create')} className="group relative text-xl flex justify-center items-center">
+              <i className=" fa-regular fa-square-plus text-2xl"/>
+              <div className='absolute bg-opacity-60 text-sm bg-purpledark opacity-0 p-2 right-0 -bottom-[160%] rounded-lg shadow translate-x-4 group-hover:translate-x-2 group-hover:opacity-100 transition text-nowrap group-hover:visible invisible'>create new</div>
+            </button>}
+          </div>
           {allFlashcards && allFlashcards.length > 0 ? (
             <ul className='text-lg'>
               {allFlashcards.map((card) => (
@@ -62,7 +69,6 @@ const Sidebar = (props) => {
           ) : (
             <p className='pl-6'>No flashcards found.</p>
           )}
-          <button onClick={() => navigate('/create')} className="self-center p-4 mt-4 ml-6 text-xl text-center transition-transform shadow bg-purpledark rounded-xl hover:scale-105">Create <i className="text-center fa-regular fa-square-plus"></i></button>
         </div>
       </div>
     }
