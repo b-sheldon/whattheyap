@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
 import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
+import Card from './Card';
 // replace w/ redux later
 const userId = 'TbNeMzejY8WlAenoFZruIt5yji62';
 
@@ -37,23 +38,12 @@ function Dashboard() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="mb-4 text-lg font-bold">{currentTitle}</h1>
+    <div className="flex flex-col flex-grow p-4">
+      <h1 className="mb-4 text-3xl font-bold">{currentTitle}</h1>
       <button onClick={() => navigate('/flashcardquiz')}>CUM</button>
-
-      {/* Input for the title of the new flashcard set */}
-      {/* <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title of the flashcard set"
-        className="p-2 mb-4 border rounded"
-      /> */}
+      
       {currentFlashcards.map((card) => (
-        <div key={card.q} className="flex flex-row">
-          <div className='p-2 m-4 bg-blue-200 rounded'>{card.q}</div>
-          <div className='p-2 m-4 bg-blue-200 rounded'>{card.a}</div>
-        </div>
+        <Card key={card.q} card={card}/>
       ))}
 
       {/* Inputs for each card */}
@@ -76,6 +66,14 @@ function Dashboard() {
         </div>
       ))}
 
+      {/* Input for the title of the new flashcard set */}
+      {/* <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Title of the flashcard set"
+        className="p-2 mb-4 border rounded"
+      /> */}
       {/* Button to add more cards */}
       <button type="button" onClick={addCard} className="p-2 mt-2 mb-4 text-white bg-green-300 rounded">
         Add Another Card
