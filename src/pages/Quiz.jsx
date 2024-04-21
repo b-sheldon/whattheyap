@@ -10,119 +10,212 @@ import { API_URL } from '../functions/config';
 
 const timeSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const textToSpeak = (question) => {
+  let text = question.q + '. ';
+  text += 'Your options are: ';
+  text += question.a1 + ', ';
+  text += question.a2 + ', ';
+  text += question.a3 + ', ';
+  text += question.a4 + '. ';
+  return text;
+}
+
 const Quiz = () => {
     const navigate = useNavigate();
-    const { currentFlashcards, speechMode, setSpeechMode, currentTitle } = useStore();
-    const [quizQuestions, setQuizQuestions] = useState([]);
+    const { speechMode, setSpeechMode, currentTitle, currentFlashcards } = useStore();
+    const { quizQuestions, setQuizQuestions } = useStore();
     const [currIndex, setCurrIndex] = useState(-1);
+    const [answer, setAnswer] = useState('');
     const [feedback, setFeedback] = useState('');
-    const [correct, setCorrect] = useState(false);
-    const answerBox = useRef(null);
     const { transcript, listenerState, textToSpeech, sttFromMic, handleMute } = useTTS();
+    const [correct, setCorrect] = useState(false);
 
-    // Function to fetch the quiz questions from the backend
-    const fetchQuizQuestions = async () => {
-      try {
-        const response = await axios.post(`${API_URL}/gpt/generate-quiz`, {
-          flashcards: currentFlashcards,
-        });
-        console.log(response);
-        setQuizQuestions(response.data.quiz);
-        setCurrIndex(0); // Start the quiz
-      } catch (error) {
-        console.error('Error generating quiz:', error);
-      }
-    };
-
-    useEffect(() => {
-      if (currentFlashcards.length > 0) {
-        fetchQuizQuestions();
-      }
-    }, [currentFlashcards]);
-
-    // Text-To-Speech function with condition check
     const condTTS = async (text) => {
-      if (!speechMode) return;
-      await textToSpeech(text);
+        if (!speechMode) return;
+        await textToSpeech(text);
     };
 
-    const handleOptionClick = async (selectedOption) => {
-      const isCorrect = selectedOption === quizQuestions[currIndex].a1;
-      setCorrect(isCorrect);
-      const feedbackMessage = isCorrect
-        ? 'Correct!'
-        : `Incorrect. The correct answer was: ${quizQuestions[currIndex].a1}.`;
-      setFeedback(feedbackMessage);
-      await condTTS(feedbackMessage);
+    const startQuiz = () => {
+        setCurrIndex(0);
+    }
 
-      if (!speechMode) await timeSleep(3000);
-      setFeedback('');
-      setCurrIndex(currIndex + 1);
-      if (currIndex + 1 < quizQuestions.length) {
-        await condTTS(quizQuestions[currIndex + 1].q);
-      } else {
-        await condTTS('Quiz complete.');
-      }
+    const condSTT = () => {
+        if (!speechMode) return;
+        sttFromMic();
     };
 
     useEffect(() => {
-      if (currIndex === 0) {
-        condTTS(quizQuestions[currIndex].q);
-      }
+      console.log('sending flashcards to backend:');
+      console.log(currentFlashcards);
+      axios.post(`${API_URL}/gpt/generate-quiz`, {
+        flashcards: currentFlashcards,
+      }).then((response) => {
+        const { quiz } = response.data;
+        const newQuiz = quiz.map((q) => {
+          const newQ = {q: q.q, a: q.a1};
+          const answers = ["a1", "a2", "a3", "a4"];
+          const randomAnswers = ["a1", "a2", "a3", "a4"].sort(() => Math.random() - 0.5);
+          for (let i = 0; i < 4; i++) {
+            newQ[answers[i]] = q[randomAnswers[i]];
+          }
+          return newQ;
+        });
+
+        setQuizQuestions(newQuiz);
+        // console.log(response.data.quiz);
+        startQuiz();
+      });
+    }, []);
+
+
+
+
+    useEffect(() => {
+        if (listenerState === 'stopped' && speechMode) {
+            if (transcript) {
+                setAnswer(transcript);
+                console.log(currIndex);
+                axios.post(`${API_URL}/gpt/validate-answer`, {
+                    response: transcript,
+                    answer: quizQuestions[currIndex].a,
+                }).then((validateResponse) => {
+                    console.dir(validateResponse.data);
+                    setCorrect(validateResponse.data === 1);
+                    setCurrIndex(currIndex + 1);
+                });
+            } else {
+                if (currIndex >= 0 && currIndex < quizQuestions.length) {
+                    textToSpeech(quizQuestions[currIndex].q).then(() => {
+                        sttFromMic();
+                    });
+                }
+            }
+        }
+    }, [listenerState]);
+
+
+    const handleNextQuesion = async () => {
+        if (currIndex === 0) {
+          console.log(quizQuestions);
+            await condTTS(textToSpeak(quizQuestions[currIndex]));
+            condSTT();
+        }
+        else if (currIndex < quizQuestions.length && currIndex > 0) {
+            const feedback = correct ? 'Correct!' : `Incorrect. The correct answer was: ${quizQuestions[currIndex - 1].a}.`;
+            setFeedback(feedback);
+            await condTTS(feedback);
+            setAnswer('');
+            if (!speechMode) await timeSleep(3000);
+            setFeedback('');
+            await condTTS(textToSpeak(quizQuestions[currIndex]));
+            condSTT();
+        } else if (currIndex >= quizQuestions.length) {
+            const feedback = correct ? 'Correct!' : `Incorrect. The correct answer was: ${quizQuestions[currIndex - 1].a}.`
+            setFeedback(feedback);
+            await condTTS(feedback);
+            if (!speechMode) await timeSleep(3000);
+            setFeedback('');
+            await condTTS('Quiz complete.');
+        }
+    };
+
+    const questionBoxText = () => {
+        if (!feedback) {
+            if (currIndex < quizQuestions.length) return quizQuestions[currIndex].q;
+            return 'Quiz Complete.';
+        }
+        return feedback;
+    }
+
+    const questionBoxColor = () => {
+        if (!feedback) return 'text-black';
+        if (correct) return 'text-green-800';
+        return 'text-red-800';
+    }
+
+    const toggleSpeechMode = async () => {
+        const temp = speechMode;
+        setSpeechMode(!speechMode);
+        if (temp) {
+            console.log('ending speech mode');
+            // handleMute();
+            return;
+        }
+        if (currIndex >= quizQuestions.length) return;
+        console.log('starting speech mode');
+        await textToSpeech(textToSpeak(quizQuestions[currIndex].q));
+        sttFromMic();
+    }
+
+    const checkAnswer = (answer) => {
+        axios.post(`${API_URL}/gpt/validate-answer`, {
+            response: answer,
+            answer: quizQuestions[currIndex].a,
+        }).then((validateResponse) => {
+            console.dir(validateResponse.data);
+            setCorrect(validateResponse.data === 1);
+            setCurrIndex(currIndex + 1);
+        });
+    };
+
+
+    useEffect(() => {
+        handleNextQuesion();
     }, [currIndex]);
 
-    if (currentFlashcards.length === 0 || quizQuestions.length === 0) return <div>Loading...</div>;
+
+    if (quizQuestions.length === 0 || currIndex < 0) return <div>Generating quiz...</div>;
 
     return (
-      <div className="flex-grow flex flex-col items-center p-10 gap-6 text-xl">
-        {/* Rest of your component code */}
+    <div className="flex-grow flex flex-col items-center gap-6 text-xl">
+        <div className="w-full flex justify-between items-center gap-4 border-b-2 py-6">
+            <button onClick={() => navigate("/dashboard")}><IconBackArrow className="cursor-pointer w-10 h-10 hover:scale-110 hover:-rotate-6 transition" /></button>
+            <div className="flex gap-2">
+                <div className='flex flex-col justify-center'>
+                    <div className='leading-none'>audio</div>
+                    <div className='leading-none'>mode</div>
+                </div>
+                <button className=" relative w-10 h-10" onClick={toggleSpeechMode}>
+                    <IconVolumeOn className="absolute top-0 left-0 transition-all text-green-800" style={{ opacity: speechMode ? 1 : 0 }} />
+                    <IconVolumeOff className="absolute top-0 left-0 transition-all text-red-800" style={{ opacity: !speechMode ? 1 : 0 }} />
+                </button>
+            </div>
+        </div>
         <div className="self-start font-bold text-2xl">{currentTitle}</div>
-        {currIndex < quizQuestions.length && (
-          <div className="w-2/3 flex flex-col items-center gap-6">
-              <div 
-                  className={`w-full bg-purplelight flex justify-center items-center border-2 border-purplelight rounded-xl focus:outline-purpledark shadow-md p-4 ${correct ? 'text-green-800' : 'text-red-800'}`}
-              >
-                  {feedback || quizQuestions[currIndex].q}
-              </div>
-              <div className='w-full flex justify-around'>
+        <div className="w-2/3 flex flex-col items-center gap-6">
+            <div 
+                className={`w-full bg-purplelight flex justify-center items-center border-2 border-purplelight rounded-xl focus:outline-purpledark shadow-md p-4 ${questionBoxColor()}`}
+            >
+                {questionBoxText()}
+            </div>
+            {(currIndex < quizQuestions.length) && <div className='flex w-full gap-2'>
+              {["a1", "a2"].map((a) => (
                 <button
-                    key={1}
-                    onClick={() => handleOptionClick(quizQuestions[currIndex].a1)}
-                    className="border-2 py-1 px-3 rounded-xl cursor-pointer border-green-800 text-green-800 shadow-md m-2"
-                    disabled={speechMode}
+                  className={` p-4 flex flex-grow justify-center items-center bg-purplelight text-black border-2 border-purplelight rounded-xl focus:outline-purpledark shadow-md transition duration-300 hover:bg-purpledark hover:text-white ${speechMode ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
+                  disabled={speechMode}
+                  onClick={() => checkAnswer(quizQuestions[currIndex][a])}
+                  key={a}
                 >
-                    {quizQuestions[currIndex].a1}
+                  {quizQuestions[currIndex][a]}
                 </button>
+              ))}
+            </div>}
+            {(currIndex < quizQuestions.length) && <div className='flex w-full gap-2'>
+              {["a3", "a4"].map((a) => (
                 <button
-                    key={2}
-                    onClick={() => handleOptionClick(quizQuestions[currIndex].a2)}
-                    className="border-2 py-1 px-3 rounded-xl cursor-pointer border-green-800 text-green-800 shadow-md m-2"
-                    disabled={speechMode}
+                  className={` p-4 flex flex-grow justify-center items-center bg-purplelight text-black border-2 border-purplelight rounded-xl focus:outline-purpledark shadow-md transition duration-300 hover:bg-purpledark hover:text-white ${speechMode ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
+                  disabled={speechMode}
+                  onClick={() => checkAnswer(quizQuestions[currIndex][a])}
+                  key={a}
                 >
-                    {quizQuestions[currIndex].a2}
+                  {quizQuestions[currIndex][a]}
                 </button>
-                <button
-                    key={3}
-                    onClick={() => handleOptionClick(quizQuestions[currIndex].a3)}
-                    className="border-2 py-1 px-3 rounded-xl cursor-pointer border-green-800 text-green-800 shadow-md m-2"
-                    disabled={speechMode}
-                >
-                    {quizQuestions[currIndex].a3}
-                </button>
-                <button
-                    key={4}
-                    onClick={() => handleOptionClick(quizQuestions[currIndex].a4)}
-                    className="border-2 py-1 px-3 rounded-xl cursor-pointer border-green-800 text-green-800 shadow-md m-2"
-                    disabled={speechMode}
-                >
-                    {quizQuestions[currIndex].a4}
-                </button>
-              </div>
-          </div>
-        )}
-        {/* Rest of your component code */}
-      </div>
+              ))}
+            </div>}
+        </div>
+    </div>
     );
+
 };
 
 export default Quiz;

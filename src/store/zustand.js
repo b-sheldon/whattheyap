@@ -8,17 +8,19 @@ const initialState = {
     currentID: '',
     allFlashcards: [],
     sidebarCollapsed: false,
-    speechMode: true,
+    speechMode: false,
 };
 
 const useStore = create(persist((set, get) => ({
     userId: null,
+    quizQuestions: [],
     currentFlashcards: [],
     currentTitle: '',
     currentID: '',
     allFlashcards: [],
     sidebarCollapsed: false,
-    speechMode: true,
+    speechMode: false,
+    setQuizQuestions: (quizQuestions) => set({ quizQuestions }),
     setSpeechMode: (speechMode) => set({ speechMode }),
     setCurrentFlashcards: (currentFlashcards) => set({ currentFlashcards }),
     setCurrentTitle: (currentTitle) => set({ currentTitle }),
