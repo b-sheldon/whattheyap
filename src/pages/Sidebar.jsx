@@ -8,10 +8,11 @@ const Sidebar = (props) => {
   const { sidebarCollapsed, setSidebarCollapsed } = useStore();
   const { currentFlashcards, setCurrentFlashcards } = useStore();
   const { currentTitle, setCurrentTitle } = useStore();
+  const { userId } = useStore();
   const navigate = useNavigate(); // Hook for navigation
 
   const refreshFlashcards = () => {
-    fetchFlashcards()
+    fetchFlashcards(userId)
       .then((data) => {
         console.log('Fetched flashcards:', data);
         setAllFlashcards(data);
