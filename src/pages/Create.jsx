@@ -14,6 +14,8 @@ function Create() {
   const [loading, setLoading] = useState(false);
   const { userId } = useStore();
   const navigate = useNavigate(); // Hook for navigation
+  const { setCurrentFlashcards } = useStore();
+  const { setCurrentTitle } = useStore();
 
   const createFlashcardsRequest = async () => {
     setLoading(true); // Start loading
@@ -24,6 +26,8 @@ function Create() {
       console.log(response);
       await createFlashcardSet(title, response.data.flashcards, userId);
       await fetchFlashcards(userId); // Fetch the latest list of flashcards to include the new one
+      setCurrentTitle(title);
+      setCurrentFlashcards(response.data.flashcards);
       navigate('/dashboard'); // Navigate to a new page on success
     } catch (error) {
       console.error('Error creating flashcards:', error);
@@ -76,7 +80,7 @@ function Create() {
 
       <div className="flex flex-col justify-center gap-4 pl-4 pr-4 ml-auto mr-auto">
         <div className="text-3xl text-center">
-          Welcome. Paste or Upload your notes to create a new set of Flashcards.
+          Welcome! Paste or Upload your notes to create a new set of Flashcards.
         </div>
         <input
           type="text"
@@ -107,7 +111,7 @@ function Create() {
           />
           <label
             htmlFor="file-upload"
-            className="p-4 text-xl transition-transform shadow bg-purpledark rounded-xl hover:scale-105 cursor-pointer"
+            className="p-4 text-xl transition-transform shadow cursor-pointer bg-purpledark rounded-xl hover:scale-105"
           >
             <i className="fa-solid fa-file-arrow-up"></i> Upload Document
           </label>

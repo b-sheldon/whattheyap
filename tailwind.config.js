@@ -9,6 +9,10 @@ module.exports = {
       colors: {
         'purpledark': '#C0A9FF',
         'purplelight': '#EBE6F9',
+        'color1': '#FFDBC3',
+        'color2': '#9F91CC',
+        'color3': '#5C4B99',
+        'color4': '#3D246C',
       },
     },
   },

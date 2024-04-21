@@ -12,11 +12,11 @@ function TopBar() {
   }
 
   return (
-      <div className="bg-purpledark h-20 text-black flex justify-between items-center p-4">
-        <h1 className="text-4xl">WhatTheYap?</h1>
+      <div className="bg-color4 h-20 text-white flex justify-between items-center p-4">
+        <h1 className="text-4xl">🎙️ What The Yap?</h1>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 rounded-xl shadow bg-purplelight  hover:bg-white transition duration-300"
+          className="px-4 py-2 rounded-xl shadow bg-color3 hover:bg-color2 transition duration-300"
         >
           sign out
         </button>

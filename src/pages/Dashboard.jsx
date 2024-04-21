@@ -5,16 +5,11 @@ import { createFlashcardSet } from '../functions/flashcards';
 import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
 import Card from './Card';
-import { updateFlashcardSet } from '../functions/flashcards';
+import { updateFlashcardSet, deleteFlashcardSet } from '../functions/flashcards';
 import IconFlashcards from '../icons/IconFlashcards';
 
 function Dashboard() {
-  const { allFlashcards, setAllFlashcards } = useStore();
-  const { currentFlashcards, setCurrentFlashcards } = useStore();
-  const { currentTitle, setCurrentTitle } = useStore();
-  const { currentID } = useStore();
-  const { userId } = useStore();
-  const { sidebarCollapsed } = useStore();
+  const { userId, sidebarCollapsed, currentID, setCurrentID, currentTitle, setCurrentTitle, currentFlashcards, setCurrentFlashcards, allFlashcards, setAllFlashcards } = useStore();
   const navigate = useNavigate();
   const [nextQuestion, setNextQuestion] = useState('');
   const [nextAnswer, setNextAnswer] = useState('');
@@ -48,15 +43,15 @@ function Dashboard() {
     updateFlashcardSet(currentID, currentTitle, newFlashcards);
   };
 
-  const handleSubmit = async () => {
-    try {
-      await createFlashcardSet(title, cards, userId);
-      // After successful creation, reset form and refresh list of flashcards
-      setCards([{ q: '', a: '' }]);
-      refreshFlashcards(); // Fetch the latest list of flashcards to include the new one
-    } catch (error) {
-      console.error('Error creating flashcard:', error);
-    }
+  const deleteSet = () => {
+    const setToDelete = allFlashcards.find((set) => set.title === currentTitle);
+    const updatedFlashcards = allFlashcards.filter((set) => set.title !== currentTitle);
+    setAllFlashcards(updatedFlashcards);
+    deleteFlashcardSet(setToDelete.id);
+    setCurrentFlashcards([]);
+    setCurrentTitle('');
+    setCurrentID('');
+    navigate('/create');
   };
 
   return (
@@ -66,6 +61,11 @@ function Dashboard() {
         <h1 className="mb-4 text-4xl font-bold">{currentTitle}</h1>
 
         <div className='flex justify-between'>
+          <button className="flex items-center px-4 py-2 mr-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={deleteSet}>
+            <i className="mr-2 fa-solid fa-trash"></i>
+            <p>Delete Set</p>
+          </button>
+
           <button className="flex items-center px-4 py-2 mr-2 transition duration-300 border-2 border-black rounded rounded-3xl hover:bg-purplelight" onClick={() => navigate('/flashcardquiz')}>
             <IconFlashcards className="w-5 mr-2"/>
             <p>Study Flashcards</p>
@@ -76,8 +76,6 @@ function Dashboard() {
             <p>Take Quiz</p>
           </button>
         </div>
-        
-
       </div>
 
         {currentFlashcards.map((card) => (
