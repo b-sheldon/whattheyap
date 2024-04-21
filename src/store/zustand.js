@@ -3,8 +3,8 @@ import { persist } from 'zustand/middleware';
 
 const initialState = {
     userId: null,
-    currentFlashcards: [],
-    currentTitle: '',
+    currentFlashcards: [{ q: 'What color are crayons?', a: 'They can be any color!'}],
+    currentTitle: 'Bens flashcards',
     currentID: '',
     allFlashcards: [],
     sidebarCollapsed: false,
