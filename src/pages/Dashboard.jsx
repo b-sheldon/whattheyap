@@ -5,7 +5,6 @@ import { createFlashcardSet } from '../functions/flashcards';
 import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
 import Card from './Card';
-import TopBar from './TopBar.jsx';
 import { updateFlashcardSet } from '../functions/flashcards';
 
 function Dashboard() {
@@ -20,7 +19,7 @@ function Dashboard() {
   const [nextAnswer, setNextAnswer] = useState('');
 
   useEffect(() => {
-    if (currentFlashcards.length === 0) {
+    if (allFlashcards.length === 0) {
       navigate('/create');
     }
   }, [currentFlashcards.length, navigate]);
@@ -69,11 +68,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="w-full">
-      
-      <TopBar></TopBar>
-
-      <div style={containerStyle} className="flex flex-col flex-grow p-2">
+    <div className="flex flex-col flex-grow p-2">
         
       <div className="flex flex-row items-center justify-between flex-grow w-full p-2 mb-4">
         <h1 className="mb-4 text-4xl font-bold">{currentTitle}</h1>
@@ -108,7 +103,6 @@ function Dashboard() {
         {/* Button to add more cards */}
           <i onClick={addCard} className="self-center p-2 mb-4 text-5xl transition-all rounded cursor-pointer fa-solid fa-circle-plus text-purpledark hover:scale-110"></i>
       </div>
-    </div>
   );
 }
 
