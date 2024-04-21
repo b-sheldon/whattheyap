@@ -33,15 +33,19 @@ export default function useTTS() {
         });
     }
 
-    async function textToSpeech(textToSpeak) {
+    async function textToSpeech(textToSpeak, callback) {
         const tokenObj = await getTokenOrRefresh();
         const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
         const myPlayer = new speechsdk.SpeakerAudioDestination();
-        updatePlayer(p => {p.p = myPlayer; return p;});
-        const audioConfig = speechsdk.AudioConfig.fromSpeakerOutput(player.p);
+        myPlayer.onAudioEnd = function (s) {
+            console.log('audio end');
+            if (callback) callback();
+        };
 
-        let synthesizer = new speechsdk.SpeechSynthesizer(speechConfig, audioConfig);
+        // updatePlayer(p => {p.p = myPlayer; return p;});
+        // const audioConfig = speechsdk.AudioConfig.fromSpeakerOutput(myPlayer);
 
+        let synthesizer = new speechsdk.SpeechSynthesizer(speechConfig, speechsdk.AudioConfig.fromSpeakerOutput(myPlayer));
         setDisplayText(`speaking text: ${textToSpeak}...`);
         synthesizer.speakTextAsync(
         textToSpeak,
@@ -75,5 +79,5 @@ export default function useTTS() {
             }
         });
     }
-    return { transcript, listenerState, textToSpeech, sttFromMic, handleMute }
+    return { transcript, listenerState, textToSpeech, sttFromMic, handleMute };
 };

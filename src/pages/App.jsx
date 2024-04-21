@@ -9,6 +9,7 @@ import Dashboard from './Dashboard';
 import Create from './Create';
 import TextToSpeech from './TextToSpeech';
 import Sidebar from './Sidebar';
+import FlashcardsLearn from './FlashcardsLearn';
 
 const Welcome = (props) => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Welcome = (props) => {
       <button type="button" onClick={() => navigate('/signin')}>Sign In</button>
       <button type="button" onClick={() => navigate('/signup')}>Sign Up</button>
       <button type="button" onClick={() => navigate('/create')}>Create</button>
+      <button type="button" onClick={() => navigate('/flashcardquiz')}>FCQuiz</button>
     </div>
   );
 };
@@ -40,6 +42,7 @@ const App = (props) => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<Create />} />
           <Route path="/text-to-speech" element={<TextToSpeech />} />
+          <Route path="/flashcardquiz" element={<FlashcardsLearn />} />
           <Route path="*" element={<FallBack />} />
         </Routes>
       </div>
