@@ -5,19 +5,18 @@ import { createFlashcardSet } from '../functions/flashcards';
 import refreshFlashcards from './Sidebar.jsx';
 import useStore from '../store/zustand';
 import Card from './Card';
-import TopBar from './TopBar.jsx';
 
 function Dashboard() {
   const [title, setTitle] = useState('');
   const [cards, setCards] = useState([{ q: '', a: '' }]);
-  const { currentFlashcards, setCurrentFlashcards } = useStore();
+  const { allFlashcards, currentFlashcards, setCurrentFlashcards } = useStore();
   const { currentTitle, setCurrentTitle } = useStore();
   const { userId } = useStore();
   const { sidebarCollapsed } = useStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentFlashcards.length === 0) {
+    if (allFlashcards.length === 0) {
       navigate('/create');
     }
   }, [currentFlashcards.length, navigate]);
@@ -54,11 +53,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="w-full">
-      
-      <TopBar></TopBar>
-
-      <div style={containerStyle} className="flex flex-col flex-grow p-2">
+    <div className="flex flex-col flex-grow p-2">
         
       <div className="w-full items-center flex flex-row flex-grow justify-between p-2 mb-4">
         <h1 className="mb-4 text-4xl font-bold">{currentTitle}</h1>
@@ -104,7 +99,6 @@ function Dashboard() {
         </button>
         
       </div>
-    </div>
   );
 }
 

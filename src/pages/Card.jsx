@@ -6,7 +6,7 @@ const Card = ({card}) => {
   const [editing, setEditing] = useState(false);
   const [question, setQuestion] = useState(card.q);
   const [answer, setAnswer] = useState(card.a);
-  const { currentID } = useStore();
+  const { currentID, userId } = useStore();
   const { currentFlashcards, setCurrentFlashcards } = useStore();
   const { currentTitle, setCurrentTitle } = useStore();
   const { allFlashcards, setAllFlashcards } = useStore();
@@ -30,7 +30,7 @@ const Card = ({card}) => {
       });
       setAllFlashcards(updatedFlashcards);
       updateFlashcardSet(currentID, currentTitle, newFlashcards);
-      fetchFlashcards();
+      fetchFlashcards(userId);
     }
     setEditing(!editing);
   }
