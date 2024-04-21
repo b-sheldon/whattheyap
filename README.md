@@ -6,6 +6,10 @@
 - **GitHub Repo**: [GitHub](https://github.com/b-sheldon/whattheyap)
 - **Backend Repo**: [GitHub](https://github.com/dstarr25/whattheyap-backend)
 
+<img width="1725" alt="original" src="https://github.com/b-sheldon/whattheyap/assets/55042077/955b3931-2c86-49da-a7ba-8c2622e45948">
+<img width="1726" alt="original (1)" src="https://github.com/b-sheldon/whattheyap/assets/55042077/48caeb7b-7f57-483a-8a75-6776622aae77">
+<img width="1725" alt="original (2)" src="https://github.com/b-sheldon/whattheyap/assets/55042077/c5987bde-419c-48aa-9bb2-a05b24cbaaff">
+<img width="1326" alt="original (3)" src="https://github.com/b-sheldon/whattheyap/assets/55042077/6ebed6f7-2ea3-4459-ab96-190d6df8ab30">
 
 ### How We Built It
 We utilized a variety of tools to bring "What The Yap?" to life:
