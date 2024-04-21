@@ -4,12 +4,7 @@ import { fetchFlashcards, createFlashcardSet } from '../functions/flashcards';
 import useStore from '../store/zustand';
 
 const Sidebar = (props) => {
-  const { allFlashcards, setAllFlashcards } = useStore();
-  const { sidebarCollapsed, setSidebarCollapsed } = useStore();
-  const { currentFlashcards, setCurrentFlashcards } = useStore();
-  const { currentTitle, setCurrentTitle } = useStore();
-  const { userId } = useStore();
-  const { currentID, setCurrentID } = useStore();
+  const { currentID, setCurrentID, userId, allFlashcards, setAllFlashcards, sidebarCollapsed, setSidebarCollapsed, currentFlashcards, setCurrentFlashcards, currentTitle, setCurrentTitle } = useStore();
   const location = useLocation();
   
   const navigate = useNavigate(); // Hook for navigation

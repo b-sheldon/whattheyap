@@ -31,3 +31,13 @@ export const updateFlashcardSet = async (id, title, cards) => {
   }
   return response;
 }
+
+export const deleteFlashcardSet = async (id) => {
+  const response = await fetch(`${API_URL}/flashcards/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to delete flashcard set');
+  }
+  return response;
+}
