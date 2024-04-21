@@ -33,8 +33,6 @@ function Create() {
   };
 
   const handleFileChange = async (event) => {
-    setLoading(true);
-
     for (const file of event.target.files) {
       const fileExt = file.name.split('.').pop();
 
@@ -42,7 +40,6 @@ function Create() {
         const reader = new FileReader();
         reader.onload = (e) => {
           setNotes((prevNotes) => prevNotes + e.target.result + '\n');
-          setLoading(false);
         };
         reader.readAsText(file);
       } 
@@ -51,8 +48,7 @@ function Create() {
         const file = event.target.files[0]
         pdfToText(file)
             .then((result) => setNotes((prevNotes) => prevNotes + result))
-            .catch(error => console.error("Failed to extract text from pdf"))
-            .finally(() => setLoading(false));
+            .catch(error => console.error("Failed to extract text from pdf"));
       } 
       
       else if (fileExt === 'docx') {
@@ -63,15 +59,13 @@ function Create() {
             .then((result) => {
               setNotes((prevNotes) => prevNotes + result.value + '\n');
             })
-            .catch((error) => console.error('Error reading docx:', error))
-            .finally(() => setLoading(false));
+            .catch((error) => console.error('Error reading docx:', error));
         };
         reader.readAsArrayBuffer(file);
       } 
       
       else {
         alert(fileExt + " is not yet supported. Please upload a .txt, .pdf, or .docx file.");
-        setLoading(false);
         event.target.value = null;
       }
     }
@@ -99,7 +93,10 @@ function Create() {
         />
 
         <div className="flex flex-row justify-end gap-4">
-         
+        <div>
+          <p>Upload as many files you wish to convert to text.</p>
+          <p>Accepted file formats: .txt, .pdf, and .docx</p>
+        </div>
           <input
             type="file"
             accept=".txt,.pdf,.docx"

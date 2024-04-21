@@ -5,6 +5,7 @@ const initialState = {
     userId: null,
     currentFlashcards: [],
     currentTitle: '',
+    currentID: '',
     allFlashcards: [],
     sidebarCollapsed: false,
     speechMode: true,
@@ -14,6 +15,7 @@ const useStore = create(persist((set, get) => ({
     userId: null,
     currentFlashcards: [],
     currentTitle: '',
+    currentID: '',
     allFlashcards: [],
     sidebarCollapsed: false,
     speechMode: true,
@@ -23,6 +25,7 @@ const useStore = create(persist((set, get) => ({
     setAllFlashcards: (allFlashcards) => set({ allFlashcards }),
     setUserId: (userId) => set({ userId }),
     setSidebarCollapsed: (sidebarCollapsed) => set({ sidebarCollapsed }),
+    setCurrentID: (currentId) => set({ currentId }),
     logout: () => set({ ...initialState }),
 }),
 {
