@@ -35,7 +35,7 @@ const App = (props) => {
     <BrowserRouter>
       <div className="flex flex-row">
         { userId && <Sidebar></Sidebar>}
-        <div className="w-full flex flex-col justify-start">
+        <div className="flex flex-col justify-start w-full">
           { userId && <TopBar></TopBar>}
           <div style={userId && containerStyle}>
             <Routes>
