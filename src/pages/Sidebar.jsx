@@ -8,6 +8,8 @@ const Sidebar = (props) => {
   const { sidebarCollapsed, setSidebarCollapsed } = useStore();
   const { currentFlashcards, setCurrentFlashcards } = useStore();
   const { currentTitle, setCurrentTitle } = useStore();
+  const { currentID, setCurrentID } = useStore();
+  
   const navigate = useNavigate(); // Hook for navigation
 
   const refreshFlashcards = () => {
@@ -26,17 +28,17 @@ const Sidebar = (props) => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
   
-  const selectFlashcardSet = (e) => {
-    setCurrentTitle(e.target.innerText);
-    const selectedSet = allFlashcards.find((card) => card.title === e.target.innerText);
-    setCurrentFlashcards(selectedSet.cards);
+  const selectFlashcardSet = (card) => {
+    setCurrentTitle(card.title);
+    setCurrentFlashcards(card.cards);
+    setCurrentID(card.id);
     navigate('/dashboard');
   }
   
   return (
     <div>
       {sidebarCollapsed ?
-      <div className="flex flex-col p-4 bg-purpledark h-20">
+      <div className="flex flex-col h-20 p-4 bg-purpledark">
         <button onClick={toggleSidebar} className="self-start w-12 p-2 text-xl font-bold text-white transition-transform rounded hover:scale-110">
           <i className="fa-solid fa-bars"></i>
         </button>
@@ -51,7 +53,7 @@ const Sidebar = (props) => {
           {allFlashcards && allFlashcards.length > 0 ? (
             <ul className='text-lg'>
               {allFlashcards.map((card) => (
-                <li key={card.id} onClick={selectFlashcardSet} className="p-6 transition-all bg-white border-b-2 shadow cursor-pointer border-purpledark hover:bg-gray-200">
+                <li key={card.id} onClick={() => selectFlashcardSet(card)} className="p-6 transition-all bg-white border-b-2 shadow cursor-pointer border-purpledark hover:bg-gray-200">
                   <p>{card.title}</p>
                 </li>
               ))}

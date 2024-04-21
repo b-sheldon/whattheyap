@@ -1,16 +1,33 @@
 import React, {useState} from "react";
+import { fetchFlashcards,updateFlashcardSet } from "../functions/flashcards";
+import useStore from "../store/zustand";
 
 const Card = ({card}) => {
   const [editing, setEditing] = useState(false);
   const [question, setQuestion] = useState(card.q);
   const [answer, setAnswer] = useState(card.a);
+  const { currentID } = useStore();
+  const { currentFlashcards, setCurrentFlashcards } = useStore();
+  const { currentTitle, setCurrentTitle } = useStore();
 
   const toggleEdit = () => {
-    setEditing(!editing);
-    if (!editing) {
+    if (editing) {
+      // Update the card in currentFlashcards
+      const newFlashcards = currentFlashcards.map((c) => {
+        if (c.q === question) {
+          return { q: question, a: answer };
+        }
+        return c;
+      });
+      setCurrentFlashcards(newFlashcards);
       // Update the card in the database
-      
+      console.log(currentID);
+      console.log(currentTitle);
+      console.log(currentFlashcards);
+      updateFlashcardSet(currentID, currentTitle, currentFlashcards);
+      fetchFlashcards();
     }
+    setEditing(!editing);
   }
   
   const renderCard = () => {
