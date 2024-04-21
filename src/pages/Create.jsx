@@ -30,30 +30,41 @@ function Create() {
     }
   };
   return (
-    <div className="flex flex-col gap-4 m-4">
-      <div className="">
-        Hello. Paste or Upload your notes to create a new set of Flashcards.
+    <div className="flex flex-col justify-center gap-4 pl-4 pr-4 ml-auto mr-auto">
+      <div className="text-3xl text-center">
+        Welcome. Paste or Upload your notes to create a new set of Flashcards.
       </div>
       <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title of the flashcard set"
-        className="p-2 border rounded"
+        placeholder="Title of your study set."
+        className="p-4 text-2xl border border-2 rounded border-purplelight focus:outline-purpledark"
       />
       <textarea
-        className="p-4 border resize-none rounded-xl"
+        className="p-4 text-xl border border-2 resize-none border-purplelight rounded-xl h-1/4 focus:outline-purpledark"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
+        placeholder='Paste notes here.'
       />
-      <button
-        className="p-4 bg-red-500 shadow rounded-xl"
-        type="button"
-        onClick={createFlashcardsRequest}
-        disabled={loading}
-      >
-        {loading ? 'Loading...' : 'Create Flashcards'}
-      </button>
+      <div className="flex flex-row justify-end gap-4">
+        <button
+          className="p-4 text-xl transition-transform shadow bg-purpledark rounded-xl hover:scale-105"
+          type="button"
+          onClick={() => createFlashcardsRequest}
+          disabled={loading}
+        >
+          <i className="fa-solid fa-file-arrow-up"></i> Upload Document
+        </button>
+        <button
+          className="p-4 text-xl transition-transform shadow bg-purpledark rounded-xl hover:scale-105"
+          type="button"
+          onClick={createFlashcardsRequest}
+          disabled={loading}
+        >
+          {loading ? 'Loading...' : 'Create Flashcards'}
+        </button>
+      </div>
     </div>
   );
 }

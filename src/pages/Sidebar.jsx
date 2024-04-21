@@ -36,22 +36,22 @@ const Sidebar = (props) => {
   }
   
   return (
-    <div className="flex flex-col gap-4 m-4">
-      <button onClick={toggleSidebar} className="self-start w-12 p-2 mb-2 text-xl font-bold text-white transition-transform bg-blue-500 rounded hover:scale-110">
+    <div className="flex flex-col h-screen gap-4 shadow bg-purplelight">
+      <button onClick={toggleSidebar} className="self-start w-12 p-2 mt-4 ml-4 text-xl font-bold text-white transition-transform rounded bg-purpledark hover:scale-110">
         {sidebarCollapsed ? <i className="fa-solid fa-bars"></i> : <i className="fa-solid fa-x"></i>}
       </button>
       <div className={`${sidebarCollapsed ? 'w-20' : 'w-64'}`} style={{ transition: 'width 0.3s' }}>
-        <h1 className="mb-4 text-lg font-bold">Your Flashcard Sets</h1>
+        <h1 className="mb-4 ml-6 text-lg text-2xl font-bold">Your Study Sets</h1>
         {allFlashcards && allFlashcards.length > 0 ? (
-          <ul>
+          <ul className='text-lg'>
             {allFlashcards.map((card) => (
-              <li key={card.id} onClick={selectFlashcardSet} className="p-2 mt-4 bg-blue-200 rounded">
+              <li key={card.id} onClick={selectFlashcardSet} className="p-6 transition-all bg-white border-b-2 shadow cursor-pointer border-purpledark hover:bg-gray-200">
                 <p>{card.title}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p>No flashcards found.</p>
+          <p className='pl-6'>No flashcards found.</p>
         )}
       </div>
     </div>
