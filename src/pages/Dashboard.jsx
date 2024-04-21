@@ -33,14 +33,16 @@ function Dashboard() {
     setNextQuestion('');
     setNextAnswer('');
     // Update the card in allFlashcards
+    let localID = "";
     const updatedFlashcards = allFlashcards.map((set) => {
-      if (set.id === currentID) {
+      if (set.title === currentTitle) {
+        localID = set.id;
         return { id: set.id, title: currentTitle, cards: newFlashcards };
       }
       return set;
     });
     setAllFlashcards(updatedFlashcards);
-    updateFlashcardSet(currentID, currentTitle, newFlashcards);
+    updateFlashcardSet(localID, currentTitle, newFlashcards);
   };
 
   const deleteSet = () => {
